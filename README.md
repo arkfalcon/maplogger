@@ -1,8 +1,16 @@
-# React + Vite
+# Maplogger BETA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Maplogger is a personal passion project of mine, designed to serve as an interactive tool that guides gamers and completionists alike
 
-Currently, two official plugins are available:
+**Features:**
+- Render a high quality fantasy map
+- Place markers around the map
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Currently supported games:**
+- Elden Ring
+
+**How it works (for the nerds):**
+- React.JS + Vite for the frontend development and testing
+- Tiles generated using MapTiler Engine 12.2
+- Map rendered using OpenLayers
+

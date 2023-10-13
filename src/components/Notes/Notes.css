@@ -1,0 +1,38 @@
+.notes {
+    position: absolute;
+    top: 75px;
+    left: 800px;
+    width: 630px;
+    height: 610px;
+    border-radius: 10px;
+    background-color: #12110D;
+    box-shadow: 0 0 10px #FFF1B8;
+    transition: box-shadow 0.2s ease-in-out;
+    overflow: auto;
+}
+
+.notes-heading {
+    font-size: 40px;
+    position: sticky;
+    top: 0;
+    margin-left: 20px;
+    background-color: #12110D;
+}
+
+.note-list-container {
+    height: 530px;
+    overflow-y: auto;
+}
+
+.note-items {
+    font-size: 20px;
+}
+
+.note-items li {
+    margin: 5px 0;
+    transition: 0.2s ease-in-out;
+}
+
+.note-items li.highlighted {
+    color:#948C6B;
+}

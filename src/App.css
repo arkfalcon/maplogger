@@ -1,8 +1,38 @@
 body {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    overflow-y: hidden;
-    background-size: cover; /* Adjust the background image size */
-    background-repeat: repeat; /* Prevent the image from repeating */
-    background-attachment: fixed; /* Fix the background image position */
-    background-image: url('/games/elden ring/assets/2.jpeg');
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  overflow-y: hidden;
+  background-size: cover;
+  /* Adjust the background image size */
+  background-repeat: repeat;
+  /* Prevent the image from repeating */
+  background-attachment: fixed;
+  /* Fix the background image position */
+  background-image: url('/games/elden ring/assets/2.jpeg');
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 100px 100px 100px #000000;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFF1B8;
+  border-radius: 10px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #948C6B;
+}
+
+.username-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
 }

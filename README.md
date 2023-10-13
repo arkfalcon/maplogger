@@ -10,7 +10,7 @@ Maplogger is a personal passion project of mine, designed to serve as an interac
 - Elden Ring
 
 **How it works (for the nerds):**
-- React.JS for the frontend
+- React.JS + Vite for the frontend development and testing
 - Tiles generated using MapTiler Engine 12.2
 - Map rendered using OpenLayers
 

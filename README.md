@@ -1,6 +1,6 @@
 # Maplogger BETA
 
-Maplogger is a personal passion project of mine, designed to serve as an interactive tool that guides gamers and completionists alike
+Maplogger is a personal passion project of mine, designed to serve as an interactive web tool that guides gamers and completionists alike
 
 **Features:**
 - Render a high quality fantasy map

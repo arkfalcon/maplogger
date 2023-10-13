@@ -38,26 +38,51 @@ class MapComponent extends Component {
 
   handleMapClick = (event) => {
     const coordinate = event.coordinate;
-
     const markerFeature = new Feature({
       geometry: new Point(coordinate),
     });
+    markerFeature.setId(Math.random().toString(36).substr(2, 9));
 
     const markerStyle = new Style({
       image: new Icon({
-        src: "/games/elden ring/assets/marker.png", // Add the path to your marker image
-        scale: 0.35, // Adjust the scale as needed
+        src: "/games/elden ring/assets/marker.png",
+        scale: 0.35,
       }),
     });
-
     markerFeature.setStyle(markerStyle);
-
     this.state.markers.addFeature(markerFeature);
+    this.addNotePopup(coordinate, markerFeature.getId());
   };
+
+  addNotePopup(coordinate, featureId) {
+    const noteOverlay = new Overlay({
+      element: document.createElement('div'),
+      positioning: 'top-center',
+      stopEvent: true,
+    });
+
+    noteOverlay.setPosition(coordinate);
+    const noteElement = document.createElement('div');
+    noteElement.className = 'note-popup';
+    const noteTextArea = document.createElement('textarea');
+    noteTextArea.id = `note-${featureId}`;
+    noteTextArea.placeholder = "Add your note here";
+    noteTextArea.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const noteText = noteTextArea.value;
+        console.log(`Note for feature ${featureId}: ${noteText}`);
+        noteOverlay.setPosition(undefined);
+      }
+    });
+
+    noteElement.appendChild(noteTextArea);
+    noteOverlay.getElement().appendChild(noteElement);
+    this.map.addOverlay(noteOverlay);
+  }
 
   createMap() {
     const maxExtent = [-19789118.42804759, -14646879.501659576, 16839108.363496605, 19819641.988605317];
-
     this.map = new Map({
       target: "map",
       view: new View({
@@ -68,9 +93,7 @@ class MapComponent extends Component {
         extent: maxExtent,
       }),
     });
-
     const tileUrl = "/games/elden ring/tiles/{z}/{x}/{y}.png";
-
     const tileLayer = new TileLayer({
       source: new XYZ({
         url: tileUrl,
@@ -78,16 +101,12 @@ class MapComponent extends Component {
         wrapX: false,
       }),
     });
-
     this.map.addLayer(tileLayer);
 
-    // Add a VectorLayer to display markers
     const markersLayer = new VectorLayer({
       source: this.state.markers,
     });
     this.map.addLayer(markersLayer);
-
-    // Attach a click event listener to the map
     this.map.on("click", this.handleMapClick);
 
     // Label for locations
@@ -105,7 +124,6 @@ class MapComponent extends Component {
     });
 
     textOverlay.setPosition(position);
-
     const labelElement = document.createElement('div');
     labelElement.className = 'text-label';
     labelElement.innerHTML = labelText;

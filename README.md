@@ -4,6 +4,7 @@ Maplogger is a personal passion project of mine, designed to serve as an interac
 
 **Features:**
 - Render a high quality fantasy map
+- 2 views: advanced and compact
 - Place markers around the map
 
 **Currently supported games:**

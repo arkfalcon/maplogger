@@ -1,0 +1,65 @@
+.map-card {
+    width: 650px;
+    height: 610px;
+    border-radius: 10px;
+    margin-left: 80px;
+    background-color: #12110D;
+    box-shadow: 0 0 10px #FFF1B8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 0.2s, box-shadow 0.2s ease-in-out;
+}
+
+.map-card:hover {
+    box-shadow: 0 0 20px #FFF1B8;
+}
+
+.text-label {
+    font-variant: small-caps;
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    cursor: default;
+}
+
+.enlarge-icon {
+    position: fixed;
+    font-size: 17px;
+    color: #12110D;
+    margin-top: -550px;
+    margin-left: 588px;
+    background-color: #FFF1B8;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    transition: transform 0.2s;
+}
+
+.enlarge-icon:hover,
+.enlarge-icon:active {
+    transform: scale(1.2);
+}
+
+#map {
+    width: 630px;
+    height: 590px;
+    background: none;
+    transition: transform 0.2s;
+}
+
+#map:active {
+    cursor: grab;
+}
+
+.map-card.enlarged {
+    width: 1260px;
+}
+
+#map.enlarged {
+    width: 1240px;
+}

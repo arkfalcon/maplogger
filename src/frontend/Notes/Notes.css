@@ -29,6 +29,7 @@
 }
 
 .note-items li {
+    list-style: disc;
     margin: 5px 0;
     transition: 0.2s ease-in-out;
 }

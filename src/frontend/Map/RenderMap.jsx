@@ -1,15 +1,13 @@
 import React, { Component } from "react";
-import "ol/ol.css";
-import './RenderMap.css';
-import Map from "ol/Map"; import View from "ol/View"; import TileLayer from "ol/layer/Tile"; import XYZ from "ol/source/XYZ";
-import Overlay from 'ol/Overlay'; import Feature from "ol/Feature"; import Point from "ol/geom/Point";
-import { Vector as VectorLayer } from "ol/layer"; import { Vector as VectorSource } from "ol/source"; import { Style, Icon } from "ol/style";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpRightAndDownLeftFromCenter, faDownLeftAndUpRightToCenter } from '@fortawesome/free-solid-svg-icons';
+import './RenderMap.css'; import "ol/ol.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; import { faUpRightAndDownLeftFromCenter, faDownLeftAndUpRightToCenter } from '@fortawesome/free-solid-svg-icons';
+import Map from "ol/Map"; import View from "ol/View"; import TileLayer from "ol/layer/Tile"; import { Style, Icon } from "ol/style";
+import XYZ from "ol/source/XYZ"; import Overlay from 'ol/Overlay'; import Feature from "ol/Feature";
+import Point from "ol/geom/Point"; import { Vector as VectorLayer } from "ol/layer"; import { Vector as VectorSource } from "ol/source";
 import Notes from '../Notes/Notes';
+import axios from 'axios';
 
 class MapComponent extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -29,10 +27,11 @@ class MapComponent extends Component {
   componentDidMount() {
     if (!this.map) {
       this.createMap();
+      this.loadMarkerData(); // load markers from markers.json
     }
   }
 
-  // Markers:
+  // markers:
   handleMapClick = (event) => {
     const coordinate = event.coordinate;
     const markerFeature = new Feature({
@@ -49,9 +48,10 @@ class MapComponent extends Component {
     markerFeature.setStyle(markerStyle);
     this.state.markers.addFeature(markerFeature);
     this.addNotePopup(coordinate, markerFeature.getId());
+    this.saveMarkerData(); // save markers data
   };
 
-  //Notes:
+  // notes:
   addNotePopup(coordinate, featureId) {
     const noteOverlay = new Overlay({
       element: document.createElement('div'),
@@ -74,8 +74,10 @@ class MapComponent extends Component {
             ...prevState.markerNotes,
             [featureId]: noteText,
           },
-        }));
-        noteOverlay.setPosition(undefined);
+        }), () => {
+          noteOverlay.setPosition(undefined);
+          this.saveMarkerData(); // save notes data
+        });
       }
     });
     noteElement.appendChild(noteTextArea);
@@ -85,7 +87,7 @@ class MapComponent extends Component {
   }
 
   createMap() {
-    const maxExtent = [-19789118.42804759, -14646879.501659576, 16839108.363496605, 19819641.988605317]; // Map bounds
+    const maxExtent = [-19789118.42804759, -14646879.501659576, 16839108.363496605, 19819641.988605317]; // map bounds
     this.map = new Map({
       target: "map",
       view: new View({
@@ -111,18 +113,17 @@ class MapComponent extends Component {
     });
     this.map.addLayer(markersLayer);
     this.map.on("click", this.handleMapClick);
-    // Log marker to console on hover and update the hoveredMarkerId
     this.map.on("pointermove", (event) => {
       const feature = this.map.forEachFeatureAtPixel(event.pixel, (feature) => feature);
       if (feature) {
         console.log("Hovered on marker with ID:", feature.getId());
-        this.setState({ hoveredMarkerId: feature.getId() }); // Update the state with the hovered marker ID
+        this.setState({ hoveredMarkerId: feature.getId() });
       } else {
-        this.setState({ hoveredMarkerId: null }); // Reset the state when not hovering over a marker
+        this.setState({ hoveredMarkerId: null });
       }
     });
 
-    // Label for locations
+    // labels for locations
     this.addTextLabel([-10172593.823245227, -6798719.637270926], 'Limgrave');
     this.addTextLabel([1000000.43509253906, -9207097.638147412], 'Caelid');
     this.addTextLabel([-7090317.662602342, 1671455.4889062573], 'Liurnia');
@@ -144,10 +145,57 @@ class MapComponent extends Component {
     this.map.addOverlay(textOverlay);
   }
 
+  // save markers
+  saveMarkerData() {
+    const markerData = {
+      markers: this.state.markers.getFeatures().map((feature) => ({
+        id: feature.getId(),
+        geometry: feature.getGeometry().getCoordinates(),
+      })),
+      markerNotes: this.state.markerNotes,
+    };
+    axios.post('http://localhost:3001/markers', markerData)
+      .then(response => console.log('Marker data saved:', response.data))
+      .catch(error => console.error('Error saving marker data:', error));
+  }
+
+  // load markers
+  loadMarkerData() {
+    axios.get('http://localhost:3001/markers')
+      .then(response => {
+        const markerData = response.data;
+        const markers = new VectorSource();
+        markerData.markers.forEach(marker => {
+          const markerFeature = new Feature({
+            geometry: new Point(marker.geometry),
+          });
+          markerFeature.setId(marker.id);
+          const markerStyle = new Style({
+            image: new Icon({
+              src: "/games/elden ring/assets/marker.png",
+              scale: 0.35,
+            }),
+          });
+          markerFeature.setStyle(markerStyle);
+          markers.addFeature(markerFeature);
+        });
+        this.setState({
+          markers: markers,
+          markerNotes: markerData.markerNotes,
+        });
+        const markersLayer = new VectorLayer({
+          source: markers,
+        });
+        this.map.addLayer(markersLayer);
+        console.log('Marker data loaded:', markerData);
+      })
+      .catch(error => console.error('Error loading marker data:', error));
+  }
+
   render() {
     const { isIconEnlarged } = this.state;
     const icon = isIconEnlarged
-      ? faDownLeftAndUpRightToCenter
+      ? faDownLeftAndUpRightFromCenter
       : faUpRightAndDownLeftFromCenter;
 
     const iconMarginLeft = isIconEnlarged ? '1200px' : '588px';

@@ -8,12 +8,7 @@ function Notes({ markerNotes, hoveredMarkerId }) {
       <div className="note-list-container">
         <ul className='note-items'>
           {Object.entries(markerNotes).map(([featureId, noteText]) => (
-            <li
-              key={featureId}
-              className={featureId === hoveredMarkerId ? 'highlighted' : ''} // Apply a CSS class if the marker is hovered
-            >
-              {noteText}
-            </li>
+            <li key={featureId} className={featureId === hoveredMarkerId ? 'highlighted' : ''} > {noteText} </li>
           ))}
         </ul>
       </div>

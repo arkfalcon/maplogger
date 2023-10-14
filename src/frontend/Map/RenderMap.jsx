@@ -167,7 +167,6 @@ class MapComponent extends Component {
       element: document.createElement('div'),
       positioning: 'center-center',
     });
-
     textOverlay.setPosition(position);
     const labelElement = document.createElement('div');
     labelElement.className = 'text-label';
@@ -184,7 +183,6 @@ class MapComponent extends Component {
       const notes = this.state.markerNotes[id] || ""; // Use an empty string if there's no note for this marker
       return { id, geometry, notes };
     });
-
     const markerData = {
       markers: markersData,
     };
@@ -199,14 +197,11 @@ class MapComponent extends Component {
       .then(response => {
         const markerData = response.data;
         const markers = new VectorSource();
-
         markerData.markers.forEach(marker => {
           const markerFeature = new Feature({
             geometry: new Point(marker.geometry),
           });
           markerFeature.setId(marker.id);
-
-          // Retrieve the notes for this marker
           const noteText = marker.notes || "";
           this.setState((prevState) => ({
             markerNotes: {
@@ -214,7 +209,6 @@ class MapComponent extends Component {
               [marker.id]: noteText,
             },
           }));
-
           const markerStyle = new Style({
             image: new Icon({
               src: "/games/elden ring/assets/marker.png",
@@ -222,14 +216,11 @@ class MapComponent extends Component {
             }),
           });
           markerFeature.setStyle(markerStyle);
-
           markers.addFeature(markerFeature);
         });
-
         this.setState({
           markers: markers,
         });
-
         const markersLayer = new VectorLayer({
           source: markers,
         });
@@ -245,7 +236,6 @@ class MapComponent extends Component {
     const icon = isIconEnlarged
       ? faDownLeftAndUpRightToCenter
       : faUpRightAndDownLeftFromCenter;
-
     const iconMarginLeft = isIconEnlarged ? '1200px' : '588px';
 
     return (

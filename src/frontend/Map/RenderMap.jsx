@@ -6,6 +6,7 @@ import XYZ from "ol/source/XYZ"; import Overlay from 'ol/Overlay'; import Featur
 import Point from "ol/geom/Point"; import { Vector as VectorLayer } from "ol/layer"; import { Vector as VectorSource } from "ol/source";
 import Notes from '../Notes/Notes';
 import axios from 'axios';
+import bossesData from '../../backend/bosses.json';
 
 class MapComponent extends Component {
   constructor(props) {
@@ -30,7 +31,27 @@ class MapComponent extends Component {
     if (!this.map) {
       this.createMap();
       this.loadMarkerData(); // load markers from markers.json
+      this.placeBossMarkers();
     }
+  }
+
+  placeBossMarkers() {
+    const bossStyle = new Style({
+      image: new Icon({
+        src: '/games/elden ring/assets/boss.png',
+        scale: 0.4,
+      }),
+    });
+
+    bossesData.forEach((boss) => {
+      const [x, y] = boss.coordinates;
+      const bossFeature = new Feature({
+        geometry: new Point([x, y]),
+      });
+      bossFeature.setStyle(bossStyle);
+      bossFeature.setId(boss.id);
+      this.state.markers.addFeature(bossFeature);
+    });
   }
 
   // markers:

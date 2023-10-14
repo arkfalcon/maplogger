@@ -8,6 +8,7 @@ Maplogger is a personal passion project of mine, designed to serve as an interac
 - Place markers around the map
 - Log info about the markers to a 'Notes' tab
 - All logging will be saved
+- Added POIs (Bosses)
 
 **Currently supported games:**
 - Elden Ring

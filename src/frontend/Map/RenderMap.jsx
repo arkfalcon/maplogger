@@ -18,12 +18,14 @@ class MapComponent extends Component {
     };
   }
 
+  // map size:
   toggleIconSize = () => {
     this.setState((prevState) => ({
       isIconEnlarged: !prevState.isIconEnlarged,
     }));
   };
 
+  // map init
   componentDidMount() {
     if (!this.map) {
       this.createMap();
@@ -51,6 +53,7 @@ class MapComponent extends Component {
     this.saveMarkerData(); // save markers data
   };
 
+  // handling empty markers
   removeEmptyMarkers() {
     const featuresToRemove = this.state.markers.getFeatures().filter((feature) => {
       const featureId = feature.getId();
@@ -112,6 +115,7 @@ class MapComponent extends Component {
     noteTextArea.focus();
   }
 
+  // make map:
   createMap() {
     const maxExtent = [-19789118.42804759, -14646879.501659576, 16839108.363496605, 19819641.988605317]; // map bounds
     this.map = new Map({
@@ -149,7 +153,7 @@ class MapComponent extends Component {
       }
     });
 
-    // labels for locations
+    // locations
     this.addTextLabel([-10172593.823245227, -6798719.637270926], 'Limgrave');
     this.addTextLabel([1000000.43509253906, -9207097.638147412], 'Caelid');
     this.addTextLabel([-7090317.662602342, 1671455.4889062573], 'Liurnia');
@@ -157,6 +161,7 @@ class MapComponent extends Component {
     this.addTextLabel([5923178.9926493885, 6447822.162273667], 'Mountaintops of the Giants');
   }
 
+  // label locations
   addTextLabel(position, labelText) {
     const textOverlay = new Overlay({
       element: document.createElement('div'),
@@ -234,6 +239,7 @@ class MapComponent extends Component {
       .catch(error => console.error('Error loading marker data:', error));
   }
 
+  // render map:
   render() {
     const { isIconEnlarged } = this.state;
     const icon = isIconEnlarged

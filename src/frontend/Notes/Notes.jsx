@@ -5,9 +5,9 @@ function Notes({ markerNotes, hoveredMarkerId }) {
   const listRef = useRef(null);
   useEffect(() => {
     if (hoveredMarkerId && listRef.current) {
-      const highlightedItem = listRef.current.querySelector('.highlighted');
+      const highlightedItem = listRef.current.querySelector('.highlighted'); // highlight current marker golden
       if (highlightedItem) {
-        highlightedItem.scrollIntoView({ behavior: 'smooth', block: 'center',inline: 'nearest'});
+        highlightedItem.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }); // autoscroll to current marker
       }
     }
   }, [hoveredMarkerId]);

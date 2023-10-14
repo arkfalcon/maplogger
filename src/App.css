@@ -2,12 +2,9 @@ body {
   font-family: Georgia, 'Times New Roman', Times, serif;
   overflow-y: hidden;
   background-size: cover;
-  /* Adjust the background image size */
   background-repeat: repeat;
-  /* Prevent the image from repeating */
   background-attachment: fixed;
-  /* Fix the background image position */
-  background-image: url('/games/elden ring/assets/2.jpeg');
+  background-image: url('/games/elden ring/assets/wp.jpeg');
 }
 
 ::-webkit-scrollbar {

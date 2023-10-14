@@ -34,11 +34,11 @@ class MapComponent extends Component {
   // markers:
   handleMapClick = (event) => {
     const coordinate = event.coordinate;
+    this.removeEmptyMarkers(); // remove empty markers
     const markerFeature = new Feature({
       geometry: new Point(coordinate),
     });
     markerFeature.setId(Math.random().toString(36).substr(2, 9));
-
     const markerStyle = new Style({
       image: new Icon({
         src: "/games/elden ring/assets/marker.png",
@@ -50,6 +50,32 @@ class MapComponent extends Component {
     this.addNotePopup(coordinate, markerFeature.getId());
     this.saveMarkerData(); // save markers data
   };
+
+  removeEmptyMarkers() {
+    const featuresToRemove = this.state.markers.getFeatures().filter((feature) => {
+      const featureId = feature.getId();
+      return (
+        !this.state.markerNotes[featureId] || this.state.markerNotes[featureId].trim() === ''
+      );
+    });
+    featuresToRemove.forEach((feature) => {
+      this.state.markers.removeFeature(feature);
+      const noteTextArea = document.getElementById(`note-${feature.getId()}`);
+      if (noteTextArea) {
+        const noteOverlay = this.map.getOverlays().getArray().find(
+          (overlay) => overlay.getElement().contains(noteTextArea)
+        );
+        if (noteOverlay) {
+          this.map.removeOverlay(noteOverlay);
+        }
+      }
+      this.setState((prevState) => {
+        const newMarkerNotes = { ...prevState.markerNotes };
+        delete newMarkerNotes[feature.getId()];
+        return { markerNotes: newMarkerNotes };
+      });
+    });
+  }
 
   // notes:
   addNotePopup(coordinate, featureId) {
@@ -147,12 +173,15 @@ class MapComponent extends Component {
 
   // save markers
   saveMarkerData() {
+    const markersData = this.state.markers.getFeatures().map((feature) => {
+      const id = feature.getId();
+      const geometry = feature.getGeometry().getCoordinates();
+      const notes = this.state.markerNotes[id] || ""; // Use an empty string if there's no note for this marker
+      return { id, geometry, notes };
+    });
+
     const markerData = {
-      markers: this.state.markers.getFeatures().map((feature) => ({
-        id: feature.getId(),
-        geometry: feature.getGeometry().getCoordinates(),
-      })),
-      markerNotes: this.state.markerNotes,
+      markers: markersData,
     };
     axios.post('http://localhost:3001/markers', markerData)
       .then(response => console.log('Marker data saved:', response.data))
@@ -165,11 +194,22 @@ class MapComponent extends Component {
       .then(response => {
         const markerData = response.data;
         const markers = new VectorSource();
+
         markerData.markers.forEach(marker => {
           const markerFeature = new Feature({
             geometry: new Point(marker.geometry),
           });
           markerFeature.setId(marker.id);
+
+          // Retrieve the notes for this marker
+          const noteText = marker.notes || "";
+          this.setState((prevState) => ({
+            markerNotes: {
+              ...prevState.markerNotes,
+              [marker.id]: noteText,
+            },
+          }));
+
           const markerStyle = new Style({
             image: new Icon({
               src: "/games/elden ring/assets/marker.png",
@@ -177,12 +217,14 @@ class MapComponent extends Component {
             }),
           });
           markerFeature.setStyle(markerStyle);
+
           markers.addFeature(markerFeature);
         });
+
         this.setState({
           markers: markers,
-          markerNotes: markerData.markerNotes,
         });
+
         const markersLayer = new VectorLayer({
           source: markers,
         });

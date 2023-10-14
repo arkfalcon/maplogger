@@ -3,13 +3,11 @@ import './Notes.css';
 
 function Notes({ markerNotes, hoveredMarkerId }) {
   const listRef = useRef(null);
-
-  // Use the ref to scroll to the highlighted item when it changes
   useEffect(() => {
     if (hoveredMarkerId && listRef.current) {
       const highlightedItem = listRef.current.querySelector('.highlighted');
       if (highlightedItem) {
-        highlightedItem.scrollIntoView({ behavior: 'smooth' });
+        highlightedItem.scrollIntoView({ behavior: 'smooth', block: 'center',inline: 'nearest'});
       }
     }
   }, [hoveredMarkerId]);

@@ -195,7 +195,7 @@ class MapComponent extends Component {
   render() {
     const { isIconEnlarged } = this.state;
     const icon = isIconEnlarged
-      ? faDownLeftAndUpRightFromCenter
+      ? faDownLeftAndUpRightToCenter
       : faUpRightAndDownLeftFromCenter;
 
     const iconMarginLeft = isIconEnlarged ? '1200px' : '588px';

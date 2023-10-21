@@ -23,4 +23,4 @@ Maplogger is a personal passion project of mine, designed to serve as an interac
 **Bonus Info:**
 - I've made a few devtools and stored them under /src/frontend/Map and /src/backend folders as devtool.txt
 - This will allow you (and subsequently me ofc) to add in new features down the road
-- Currently, the devtool will allow you to log different points on the map as coordinates and parse them to a JSON
+- Currently, the devtools will allow you to log different points on the map as coordinates and parse them to a JSON

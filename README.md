@@ -20,3 +20,6 @@ Maplogger is a personal passion project of mine, designed to serve as an interac
 - Map rendered using OpenLayers (yes i hate myself)
 - Icons taken from FontAwesome
 
+**Bonus Info:**
+- I've made a few devtools and stored them under /src/RenderMap folder
+- This will allow you (and subsequently me ofc) to add in new maps down the road

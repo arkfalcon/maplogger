@@ -3,7 +3,7 @@
     top: 75px;
     left: 800px;
     width: 630px;
-    height: 305px;
+    height: 610px;
     border-radius: 10px;
     background-color: #12110D;
     box-shadow: 0 0 10px #FFF1B8;
@@ -19,7 +19,7 @@
 }
 
 .note-list-container {
-    height: 240px;
+    height: 520px;
     overflow-y: auto;
 }
 

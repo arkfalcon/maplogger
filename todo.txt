@@ -1,0 +1,4 @@
+- add reverse compatibility with notes and markers
+- filters for markers
+- delete markers
+- work on immersive view navbar
